@@ -16,7 +16,7 @@
         <Button Content="Add" HorizontalAlignment="Left" Margin="189,88,0,0" VerticalAlignment="Top" Width="40" Click="Add_Click" RenderTransformOrigin="1.675,0.409"/>
         <Button Content="+" HorizontalAlignment="Left" Margin="210,9,0,0" VerticalAlignment="Top" Width="40" Click="VolumeUp_Click" RenderTransformOrigin="1.675,0.409"/>
         <Button Content="-" HorizontalAlignment="Left" Margin="210,41,0,0" VerticalAlignment="Top" Width="40" Click="VolumeDown_Click" RenderTransformOrigin="1.675,0.409"/>
-
+        
         <ListView x:Name="playLista"  HorizontalAlignment="Left" Height="275" Margin="10,137,0,0" VerticalAlignment="Top" Width="267" 
                   RenderTransformOrigin="0.485,0.765" AllowDrop="True" MouseDoubleClick="ListView_MouseDoubleClick" >
             <ListView.View>
@@ -44,6 +44,7 @@
             </ProgressBar.RenderTransform>
         </ProgressBar>
         <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="64,17,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" />
+        <Button Content="Save" HorizontalAlignment="Left" Margin="101,45,0,0" VerticalAlignment="Top" Width="40" Click="Save_Click"/>
 
     </Grid>
 </Window>

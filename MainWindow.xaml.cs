@@ -174,7 +174,7 @@ namespace Media_Player
                 new Animal("Peach", 40, 20),
              };
            */
-            using (Stream fs = new FileStream(@"C:\test\animals.xml", FileMode.Create, FileAccess.Write, FileShare.None))
+            using (Stream fs = new FileStream(@"D:\test\track.xml", FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 XmlSerializer serializer2 = new XmlSerializer(typeof(List<Uri>));
                 serializer2.Serialize(fs, tracks);
@@ -185,13 +185,22 @@ namespace Media_Player
 
             XmlSerializer serializer3 = new XmlSerializer(typeof(List<Uri>));
 
-            using (FileStream fs2 = File.OpenRead(@"C:\test\animals.xml"))
+            using (FileStream fs2 = File.OpenRead(@"D:\test\track.xml"))
             {
                 tracks = (List<Uri>)serializer3.Deserialize(fs2);
             }
         }
 
+       
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+             using (Stream fs = new FileStream(@"D:\test\track.xml", FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<Uri>));
+                serializer.Serialize(fs, tracks);
 
-
+            }
+           
+        }
     }
 }
