@@ -41,6 +41,11 @@ namespace Media_Player
 
           for (int i = 0; i < tracks.Count; i++)
             this.playLista.Items.Add(tracks.ElementAt(i));
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += TickTimer;
+            timer.Start();
         }
         
 
@@ -61,8 +66,8 @@ namespace Media_Player
                 durationSliderProgress.Value = mediaPlayer.Position.TotalSeconds;
 
                 volumeProgressBar.Minimum = 0;
-                volumeProgressBar.Maximum = 1;
-                volumeProgressBar.SmallChange = 0.05;
+                volumeProgressBar.Maximum = 1.1;
+                volumeProgressBar.SmallChange = 0.1;
                 volumeProgressBar.Value = mediaPlayer.Volume;
             }
             else
@@ -107,21 +112,33 @@ namespace Media_Player
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Media files (*.mp3;*.wav;)|*.mp3;*.wav;|All files (*.*)|*.*";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.RestoreDirectory = true;
+            openFileDialog.Multiselect = true;
+            openFileDialog.Title = "Please Select Source File(s) for List";
 
-          
+            openFileDialog.Filter = "Media files (*.mp3;*.wav;)|*.mp3;*.wav;|All files (*.*)|*.*";
+ 
             if (openFileDialog.ShowDialog() == true)
             {
-                Uri uriAddress = new Uri(openFileDialog.FileName);
-                tracks.Add(uriAddress);
+
+                foreach (String file in openFileDialog.FileNames)
+                {
+                    try
+                    {
+                        Uri uriAddress = new Uri(file);
+                        tracks.Add(uriAddress);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                    }
+
+                }
             }
 
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += TickTimer;
-            timer.Start();
-
             AddToList();
+
         }
 
         private void SliderProgress_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
@@ -142,13 +159,13 @@ namespace Media_Player
 
         private void VolumeUp_Click(object sender, RoutedEventArgs e)
         {
-            mediaPlayer.Volume += 0.05;
+            mediaPlayer.Volume += 0.1;
         }
 
         private void VolumeDown_Click(object sender, RoutedEventArgs e)
         {
            
-            mediaPlayer.Volume -= 0.05;
+            mediaPlayer.Volume -= 0.1;
         }
 
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -156,14 +173,28 @@ namespace Media_Player
             int trackNumber = playLista.SelectedIndex;
             this.textBox.Text = "Track nr: " + trackNumber.ToString(); ;
 
-            mediaPlayer.Open(tracks[trackNumber]);
-            mediaPlayer.Play();
+            if (tracks.Count != 0)
+            {
+                if (trackNumber == -1)
+                {
+                    this.textBox.Text = "No Track Selected";
+                }
+                else
+                {
+                    mediaPlayer.Open(tracks[trackNumber]);
+                    mediaPlayer.Play();
+                }
+            }
+            else
+            {
+                this.textBox.Text = "No Track Selected";
+            }
 
         }
 
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            mediaPlayer.Volume += (e.Delta > 0) ? 0.05 : -0.05;
+            mediaPlayer.Volume += (e.Delta > 0) ? 0.1 : -0.1;
         }
         private void Serialization()
         {
@@ -194,13 +225,50 @@ namespace Media_Player
        
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-             using (Stream fs = new FileStream(@"D:\test\track.xml", FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<Uri>));
-                serializer.Serialize(fs, tracks);
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Media files (*.xml)|*.xml;*|All files (*.*)|*.*";
 
+            if(saveFileDialog.ShowDialog() == true)
+            using (Stream fileStream = new FileStream(saveFileDialog.FileName, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                List<string> stringTracks = new List<string>();
+
+                for(int i = 0; i < tracks.Count(); i++)
+                {
+                    stringTracks.Add(tracks[i].ToString());
+                }
+                XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
+                serializer.Serialize(fileStream, stringTracks);
             }
            
+        }
+
+        private void Load_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Media files (*.xml)|*xml;|All files(*.*)|*.*";
+
+            List<string> stringTracks = new List<string>();
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<String>));
+
+                using (FileStream fileStream = File.OpenRead(openFileDialog.FileName))
+                {
+                    stringTracks = (List<string>)serializer.Deserialize(fileStream);
+                }
+            }
+
+            tracks.Clear();
+            
+            for(int i = 0; i < stringTracks.Count(); i++)
+            {
+                tracks.Add(new Uri(stringTracks[i]));
+            }
+
+            AddToList();
+          
         }
     }
 }
