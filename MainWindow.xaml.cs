@@ -28,6 +28,7 @@ namespace Media_Player
         public List<Uri> tracks;
         private MediaPlayer mediaPlayer = new MediaPlayer();
         private bool draggSlider = false;
+        private bool isPaused = false;
 
         public MainWindow()
         {
@@ -56,6 +57,7 @@ namespace Media_Player
                 
                 elapsedTime.Content = string.Format("{0}", mediaPlayer.Position.ToString(@"mm\:ss"));
                 duration.Content = string.Format("{0}", mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
+
 
                 durationProgressBar.Minimum = 0;
                 durationProgressBar.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
@@ -89,8 +91,18 @@ namespace Media_Player
                 }
                 else
                 {
-                    mediaPlayer.Open(tracks[trackNumber]);
-                    mediaPlayer.Play();
+                    if (!isPaused)
+                    {
+                        mediaPlayer.Open(tracks[trackNumber]);
+                        mediaPlayer.Play();
+                    }
+                    else
+                    {
+                        mediaPlayer.Play();
+                        isPaused = false;
+                    }
+                        
+                   
                 }
             }  
             else
@@ -101,7 +113,18 @@ namespace Media_Player
 
         private void Pause_Click(object sender, RoutedEventArgs e)
         {
-            mediaPlayer.Pause();
+            if (!isPaused)
+            {
+                mediaPlayer.Pause();
+                isPaused = true;
+            }
+            else
+            {
+                mediaPlayer.Play();
+                isPaused = false;
+            }
+                
+                
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e)
@@ -196,33 +219,7 @@ namespace Media_Player
         {
             mediaPlayer.Volume += (e.Delta > 0) ? 0.1 : -0.1;
         }
-        private void Serialization()
-        {
-          /*  List<Animal> theAnimals = new List<Animal>
-            {
-                new Animal("Mario", 60, 30),
-                new Animal("Luigi", 55, 24),
-                new Animal("Peach", 40, 20),
-             };
-           */
-            using (Stream fs = new FileStream(@"D:\test\track.xml", FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                XmlSerializer serializer2 = new XmlSerializer(typeof(List<Uri>));
-                serializer2.Serialize(fs, tracks);
-
-            }
-
-            tracks = null;
-
-            XmlSerializer serializer3 = new XmlSerializer(typeof(List<Uri>));
-
-            using (FileStream fs2 = File.OpenRead(@"D:\test\track.xml"))
-            {
-                tracks = (List<Uri>)serializer3.Deserialize(fs2);
-            }
-        }
-
-       
+        
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
