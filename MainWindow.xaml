@@ -33,6 +33,7 @@
                      Value="{Binding ElementName=mePlayer, Path=Volume}"/>
         <Slider x:Name="durationSliderProgress" Thumb.DragStarted="SliderProgress_DragStarted" Thumb.DragCompleted="SliderProgress_DragCompleted" 
                    ValueChanged="SliderProgress_ValueChanged"  HorizontalAlignment="Left" Margin="40,63,0,0" VerticalAlignment="Top" Height="25" Width="199"/>
+        <Slider x:Name="volumeSlider" Margin="1,9,259,297" Orientation="Vertical" Thumb.DragStarted="SliderVolume_DragStarted" Thumb.DragCompleted="SliderVolume_DragCompleted"/>
         <ProgressBar x:Name="volumeProgressBar"   HorizontalAlignment="Left" Height="10" Margin="217,53,-23,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.5,0.5">
             <ProgressBar.RenderTransform>
                 <TransformGroup>

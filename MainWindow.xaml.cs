@@ -28,6 +28,7 @@ namespace Media_Player
         public List<Uri> tracks;
         private MediaPlayer mediaPlayer = new MediaPlayer();
         private bool draggSlider = false;
+        private bool volumeDarggSlider = false;
         private bool isPaused = false;
 
         public MainWindow()
@@ -49,15 +50,12 @@ namespace Media_Player
             timer.Start();
         }
         
-
         private void TickTimer(object sender, EventArgs e)
         {
             if(mediaPlayer.Source != null)
             {
-                
                 elapsedTime.Content = string.Format("{0}", mediaPlayer.Position.ToString(@"mm\:ss"));
                 duration.Content = string.Format("{0}", mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
-
 
                 durationProgressBar.Minimum = 0;
                 durationProgressBar.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
@@ -71,6 +69,10 @@ namespace Media_Player
                 volumeProgressBar.Maximum = 1.1;
                 volumeProgressBar.SmallChange = 0.1;
                 volumeProgressBar.Value = mediaPlayer.Volume;
+
+                volumeSlider.Minimum = 0;
+                volumeSlider.Maximum = 1;
+                volumeSlider.Value = mediaPlayer.Volume;
             }
             else
             {
@@ -100,9 +102,7 @@ namespace Media_Player
                     {
                         mediaPlayer.Play();
                         isPaused = false;
-                    }
-                        
-                   
+                    }               
                 }
             }  
             else
@@ -122,9 +122,7 @@ namespace Media_Player
             {
                 mediaPlayer.Play();
                 isPaused = false;
-            }
-                
-                
+            }      
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e)
@@ -138,7 +136,7 @@ namespace Media_Player
             openFileDialog.FilterIndex = 2;
             openFileDialog.RestoreDirectory = true;
             openFileDialog.Multiselect = true;
-            openFileDialog.Title = "Please Select Source File(s) for List";
+            openFileDialog.Title = "Please Select Source File(s) for a List";
 
             openFileDialog.Filter = "Media files (*.mp3;*.wav;)|*.mp3;*.wav;|All files (*.*)|*.*";
  
@@ -156,12 +154,9 @@ namespace Media_Player
                     {
                         MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                     }
-
                 }
             }
-
             AddToList();
-
         }
 
         private void SliderProgress_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
@@ -178,6 +173,19 @@ namespace Media_Player
         private void SliderProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             elapsedTime.Content = TimeSpan.FromSeconds(durationSliderProgress.Value).ToString(@"mm\:ss");
+            draggSlider = true;
+        }
+
+        private void SliderVolume_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+        {
+            volumeDarggSlider = true;
+        }
+
+        private void SliderVolume_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            volumeDarggSlider = false;
+            mediaPlayer.Volume = volumeSlider.Value;
+            this.textBox.Text = "volume:" + mediaPlayer.Volume.ToString(); 
         }
 
         private void VolumeUp_Click(object sender, RoutedEventArgs e)
@@ -186,8 +194,7 @@ namespace Media_Player
         }
 
         private void VolumeDown_Click(object sender, RoutedEventArgs e)
-        {
-           
+        {    
             mediaPlayer.Volume -= 0.1;
         }
 
@@ -236,8 +243,7 @@ namespace Media_Player
                 }
                 XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
                 serializer.Serialize(fileStream, stringTracks);
-            }
-           
+            }    
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
@@ -263,9 +269,7 @@ namespace Media_Player
             {
                 tracks.Add(new Uri(stringTracks[i]));
             }
-
-            AddToList();
-          
+            AddToList();    
         }
     }
 }
