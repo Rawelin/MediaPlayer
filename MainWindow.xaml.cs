@@ -30,12 +30,14 @@ namespace Media_Player
         private bool draggSlider = false;
         private bool volumeDarggSlider = false;
         private bool isPaused = false;
+        
 
         public MainWindow()
         {
             InitializeComponent();
            
             tracks = new List<Uri>();
+          
         }
         private void AddToList()
         {
@@ -66,7 +68,7 @@ namespace Media_Player
                 durationSliderProgress.Value = mediaPlayer.Position.TotalSeconds;
 
                 volumeProgressBar.Minimum = 0;
-                volumeProgressBar.Maximum = 1.1;
+                volumeProgressBar.Maximum = 1.0;
                 volumeProgressBar.SmallChange = 0.1;
                 volumeProgressBar.Value = mediaPlayer.Volume;
 
@@ -201,7 +203,7 @@ namespace Media_Player
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             int trackNumber = playLista.SelectedIndex;
-            this.textBox.Text = "Track nr: " + trackNumber.ToString(); ;
+            this.textBox.Text = "Track nr: " + trackNumber.ToString();
 
             if (tracks.Count != 0)
             {
@@ -264,12 +266,12 @@ namespace Media_Player
             }
 
             tracks.Clear();
-            
-            for(int i = 0; i < stringTracks.Count(); i++)
+
+            for (int i = 0; i < stringTracks.Count(); i++)
             {
                 tracks.Add(new Uri(stringTracks[i]));
             }
-            AddToList();    
+            AddToList();
         }
     }
 }

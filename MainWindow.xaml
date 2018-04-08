@@ -5,48 +5,70 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Media_Player"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="300" ResizeMode="NoResize">
+        Title="MainWindow" Height="450" Width="400" ResizeMode="NoResize">
 
+    <Window.Resources>
+        <Style x:Key="GridViewColumnHeaderStyle1" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                        <Border BorderThickness="0,0,0,1" BorderBrush="Black" Background="Transparent">
+                            <TextBlock x:Name="ContentHeader" Text="{TemplateBinding Content}" Padding="5,5,5,0" Width="{TemplateBinding Width}" TextAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+    </Window.Resources>
+    
+    
 
-    <Grid MouseWheel="Grid_MouseWheel" Background="DarkGray">
+    <StackPanel Background="#424242">
+        <StackPanel>
+            <ProgressBar x:Name="durationProgressBar" HorizontalAlignment="Left" Height="4" VerticalAlignment="Top" Width="394"
+                     Value="{Binding ElementName=mePlayer, Path=Volume}" Foreground="#FF0187D3"/>
+            <ProgressBar x:Name="volumeProgressBar"   HorizontalAlignment="Left" Height="4" VerticalAlignment="Top" Width="394" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,3"/>
+        </StackPanel>
 
-        <Button Content="Play" HorizontalAlignment="Left" Margin="59,89,0,0" VerticalAlignment="Top" Width="40" Click="Play_Click"/>
-        <Button Content="Pause" HorizontalAlignment="Left" Margin="103,89,0,0" VerticalAlignment="Top" Width="40" Click="Pause_Click" />
-        <Button Content="Stop" HorizontalAlignment="Left" Margin="146,89,0,0" VerticalAlignment="Top" Width="40" Click="Stop_Click"/>
-        <Button Content="Add" HorizontalAlignment="Left" Margin="189,88,0,0" VerticalAlignment="Top" Width="40" Click="Add_Click" RenderTransformOrigin="1.675,0.409"/>
-        <Button Content="+" HorizontalAlignment="Left" Margin="210,9,0,0" VerticalAlignment="Top" Width="40" Click="VolumeUp_Click" RenderTransformOrigin="1.675,0.409"/>
-        <Button Content="-" HorizontalAlignment="Left" Margin="210,41,0,0" VerticalAlignment="Top" Width="40" Click="VolumeDown_Click" RenderTransformOrigin="1.675,0.409"/>
-        
-        <ListView x:Name="playLista"  HorizontalAlignment="Left" Height="275" Margin="10,137,0,0" VerticalAlignment="Top" Width="267" 
-                  RenderTransformOrigin="0.485,0.765" AllowDrop="True" MouseDoubleClick="ListView_MouseDoubleClick" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn  Header="Artist" Width="380" />
-                 
-                </GridView>
-            </ListView.View>
+        <Grid Height="60">
+            <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="154" Background="#424242" Margin="0,18,0,0"/>
+            <Label x:Name="elapsedTime" Content="Label" HorizontalAlignment="Left" Margin="163,17,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551" Foreground="#ffffff" />
+            <Label x:Name="duration" Content="Label" HorizontalAlignment="Left" Margin="204,17,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551" Foreground="#ffffff"/>
+            <Slider x:Name="volumeSlider" Margin="264,18,9,17" Orientation="Horizontal" Thumb.DragStarted="SliderVolume_DragStarted" Thumb.DragCompleted="SliderVolume_DragCompleted"/>
+        </Grid>
+
+        <Grid MouseWheel="Grid_MouseWheel"  Height="60" >
+
+            <Slider x:Name="durationSliderProgress" Thumb.DragStarted="SliderProgress_DragStarted" Thumb.DragCompleted="SliderProgress_DragCompleted" 
+                   ValueChanged="SliderProgress_ValueChanged"  HorizontalAlignment="Left" Margin="9,3,0,0" VerticalAlignment="Top" Height="25" Width="348"/>
+            <Button Content="Play" HorizontalAlignment="Left" Margin="8,33,0,0" VerticalAlignment="Top" Width="40" Click="Play_Click" Background="Transparent"/>
+            <Button Content="Pause" HorizontalAlignment="Left" Margin="52,33,0,0" VerticalAlignment="Top" Width="40" Click="Pause_Click" />
+            <Button Content="Stop" HorizontalAlignment="Left" Margin="97,33,0,0" VerticalAlignment="Top" Width="40" Click="Stop_Click"/>
+            <Button Content="Add" HorizontalAlignment="Left" Margin="141,33,0,0" VerticalAlignment="Top" Width="40" Click="Add_Click" RenderTransformOrigin="1.675,0.409"/>
+            <Button Content="+" HorizontalAlignment="Left" Margin="191,33,0,0" VerticalAlignment="Top" Width="40" Click="VolumeUp_Click" RenderTransformOrigin="1.675,0.409"/>
+            <Button Content="-" HorizontalAlignment="Left" Margin="234,33,0,0" VerticalAlignment="Top" Width="40" Click="VolumeDown_Click" RenderTransformOrigin="1.675,0.409"/>
+            <Button Content="Save" HorizontalAlignment="Left" Margin="319,33,0,0" VerticalAlignment="Top" Width="40" Click="Save_Click"/>
+            <Button Content="Load" HorizontalAlignment="Left" Margin="277,33,0,0" VerticalAlignment="Top" Width="40" Click="Load_Click"/>
+        </Grid>
+        <StackPanel Height="290" Background="#303030">
+
+            <ListView x:Name="playLista"  HorizontalAlignment="Left" Height="275" Margin="0,8,0,0" VerticalAlignment="Top" Width="383"
+                  RenderTransformOrigin="0.485,0.765"  MouseDoubleClick="ListView_MouseDoubleClick" AllowDrop="True" Background="#303030"
+                  Foreground="#ffffff" BorderBrush="#FF343A44" MaxHeight="270">
+                <ListView.View >
+                    <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle1}"  > 
+                        <GridViewColumn Header="Artist" Width="380" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
             
-        </ListView>
-        <Label x:Name="elapsedTime" Content="Label" HorizontalAlignment="Left" Margin="18,104,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551"/>
-        <Label x:Name="duration" Content="Label" HorizontalAlignment="Left" Margin="237,102,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551"/>
-        <ProgressBar x:Name="durationProgressBar" HorizontalAlignment="Left" Height="10" Margin="57,115,0,0" VerticalAlignment="Top" Width="174"
-                     Value="{Binding ElementName=mePlayer, Path=Volume}"/>
-        <Slider x:Name="durationSliderProgress" Thumb.DragStarted="SliderProgress_DragStarted" Thumb.DragCompleted="SliderProgress_DragCompleted" 
-                   ValueChanged="SliderProgress_ValueChanged"  HorizontalAlignment="Left" Margin="40,63,0,0" VerticalAlignment="Top" Height="25" Width="199"/>
-        <Slider x:Name="volumeSlider" Margin="1,9,259,297" Orientation="Vertical" Thumb.DragStarted="SliderVolume_DragStarted" Thumb.DragCompleted="SliderVolume_DragCompleted"/>
-        <ProgressBar x:Name="volumeProgressBar"   HorizontalAlignment="Left" Height="10" Margin="217,53,-23,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.5,0.5">
-            <ProgressBar.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-90.67"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </ProgressBar.RenderTransform>
-        </ProgressBar>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="64,17,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" />
-        <Button Content="Save" HorizontalAlignment="Left" Margin="65,45,0,0" VerticalAlignment="Top" Width="40" Click="Save_Click"/>
-        <Button Content="Load" HorizontalAlignment="Left" Margin="144,45,0,0" VerticalAlignment="Top" Width="40" Click="Load_Click"/>
-       
-    </Grid>
+            
+        </StackPanel>
+    </StackPanel>
+    
+
 </Window>
