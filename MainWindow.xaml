@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Media_Player"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="400" ResizeMode="NoResize" Icon="./Resources/play.png" WindowStyle="None">
+        Title="MainWindow" Height="450" Width="400" ResizeMode="NoResize" Icon="./Resources/play.png"
+        WindowStyle="None" MouseDown="Window_MouseDown">
 
 
     <Window.Resources>
@@ -25,8 +26,12 @@
             <Setter Property="FontSize" Value="12" />
         </Style>
         <Style TargetType="{x:Type ListViewItem}">
-            
+
             <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true" >
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="Gray" />
+                </Trigger>
                 <Trigger Property="IsSelected" Value="true" >
                     <Setter Property="Foreground" Value="Black" />
                     <Setter Property="Background" Value="Gray" />
@@ -36,10 +41,14 @@
     </Window.Resources>
 
     <StackPanel Background="#383e47">
+        <Grid>
+            <Button Width="15" Height="15" Margin="382,0,3,0" Click="Close_app" FontSize="8">X</Button>
+            <Button Height="15" Margin="366,0,19,0" Click="Minimize_app" FontSize="8">-</Button>
+        </Grid>
         <StackPanel>
             <ProgressBar x:Name="durationProgressBar" HorizontalAlignment="Left" Height="4" VerticalAlignment="Top" Width="399"
                      Value="{Binding ElementName=mePlayer, Path=Volume}" Foreground="#FF0187D3"/>
-            <ProgressBar x:Name="volumeProgressBar"   HorizontalAlignment="Left" Height="4" VerticalAlignment="Top" Width="399" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,3"/>
+            <ProgressBar x:Name="volumeProgressBar"   HorizontalAlignment="Left" Height="4" VerticalAlignment="Top" Width="399" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,3" Background="Transparent" BorderBrush="Transparent"/>
         </StackPanel>
 
         <Grid Height="60">
@@ -88,20 +97,17 @@
         </Grid>
         <StackPanel Height="320" Background="#303030">
             <ListView x:Name="playLista"  HorizontalAlignment="Left"  Margin="1,3,0,0"  VerticalAlignment="Top" Width="398" MaxHeight="318"
-                  RenderTransformOrigin="0.485,0.765"  MouseDoubleClick="ListView_MouseDoubleClick" AllowDrop="True" Background="#303030" BorderBrush="#FF343A44" Foreground="White" >
-           
+                  RenderTransformOrigin="0.485,0.765"  MouseDoubleClick="ListView_MouseDoubleClick" Background="#303030" 
+                   BorderBrush="#FF343A44" Foreground="White" 
+                   AllowDrop="True" >
+
                 <ListView.View >
                     <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle1}"  >
-                        <GridViewColumn Header="Artist" Width="380" />
+                        <GridViewColumn Header="Artist" Width="380"/>
                     </GridView>
-                    
+
                 </ListView.View>
-               
             </ListView>
-
-
         </StackPanel>
     </StackPanel>
-
-
 </Window>
