@@ -30,6 +30,7 @@ namespace Media_Player
         private bool draggSlider = false;
         private bool volumeDarggSlider = false;
         private bool isPaused = false;
+        private bool playListFlag = true;
         
 
         public MainWindow()
@@ -288,6 +289,28 @@ namespace Media_Player
         private void Minimize_app(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
+        }
+
+        private void ShowPlayList(object sender, RoutedEventArgs e)
+        {
+            if(playListFlag)
+            {
+                playLista.MaxHeight = 300;
+                listStack.Height = 300;
+                Application.Current.MainWindow.Height = 420;
+
+                playListFlag = false;
+            }
+            else
+            {
+                playLista.MaxHeight = 0;
+                listStack.Height = 0;
+                Application.Current.MainWindow.Height = 150;
+
+                playListFlag = true;
+            }
+            
+
         }
     }
 }
