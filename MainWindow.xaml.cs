@@ -57,8 +57,8 @@ namespace Media_Player
         {
             if(mediaPlayer.Source != null)
             {
-                elapsedTime.Content = string.Format("{0}", mediaPlayer.Position.ToString(@"mm\:ss"));
-                duration.Content = string.Format("{0}", mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
+                elapsedTime.Content = string.Format("{0}", mediaPlayer.Position.ToString(@"hh\mm\:ss"));
+                duration.Content = string.Format("{0}", mediaPlayer.NaturalDuration.TimeSpan.ToString(@"hh\mm\:ss"));
 
                 durationProgressBar.Minimum = 0;
                 durationProgressBar.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
@@ -86,7 +86,7 @@ namespace Media_Player
         private void Play_Click(object sender, RoutedEventArgs e)
         {
             int trackNumber = playLista.SelectedIndex;
-            this.textBox.Text = "Track nr: " + trackNumber.ToString(); ;
+            this.textBox.Text = "Track nr: " + trackNumber.ToString();
 
             if (tracks.Count != 0)
             {
@@ -295,9 +295,9 @@ namespace Media_Player
         {
             if(playListFlag)
             {
-                playLista.MaxHeight = 300;
-                listStack.Height = 300;
-                Application.Current.MainWindow.Height = 420;
+                playLista.MaxHeight = 260;
+                listStack.Height = 260;
+                Application.Current.MainWindow.Height = 430;
 
                 playListFlag = false;
             }
@@ -305,12 +305,10 @@ namespace Media_Player
             {
                 playLista.MaxHeight = 0;
                 listStack.Height = 0;
-                Application.Current.MainWindow.Height = 150;
+                Application.Current.MainWindow.Height = 170;
 
                 playListFlag = true;
             }
-            
-
         }
     }
 }

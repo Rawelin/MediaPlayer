@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Media_Player"
         mc:Ignorable="d"
-        Title="MainWindow" Height="155" Width="400" ResizeMode="NoResize" Icon="./Resources/play.png"
+        Title="MainWindow" Height="170" Width="400" ResizeMode="NoResize" Icon="./Resources/play.png"
         WindowStyle="None" MouseDown="Window_MouseDown">
 
 
     <Window.Resources>
+
         <Style x:Key="GridViewColumnHeaderStyle1" TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -25,6 +26,7 @@
             <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="FontSize" Value="12" />
         </Style>
+
         <Style TargetType="{x:Type ListViewItem}">
 
             <Style.Triggers>
@@ -38,9 +40,142 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="MyFocusVisualStyte" >
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle x:Name="FocusStyle" StrokeDashArray="4 4" RadiusX="5" RadiusY="5" Fill="Transparent"
+                           Stroke="#99029cc7" StrokeThickness="1" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SliderRepeatButtonStyle1" TargetType="{x:Type RepeatButton}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border  BorderThickness="1" BorderBrush="#222225" Background="#333333" Height="4"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SliderRepeatButtonStyle2" TargetType="RepeatButton">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Border SnapsToDevicePixels="True" Background="#5734b4e3"  BorderThickness="1" BorderBrush="DimGray" Height="4"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SliderThumbStyle" TargetType="{x:Type Thumb}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Grid>
+                            <Border Name="outerBorder"
+                            Background="#5734b4e3"
+                            BorderBrush="#5734b4e3"
+                            Height="16" Width="16" Opacity="1" BorderThickness="2" CornerRadius="13"/>
+                            <Border Name="innerBorder"
+                            Background="#aa34b4e3"
+                            BorderBrush="#FF34b4e3"
+                            Height="10" Width="10" CornerRadius="5" Opacity="1" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="outerBorder" Property="BorderBrush" Value="#BB34b4e3" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="outerBorder" Property="Background" Value="#55ACACAC" />
+                                <Setter TargetName="outerBorder" Property="BorderBrush" Value="#55ACACAC" />
+                                <Setter TargetName="innerBorder" Property="Width" Value="4" />
+                                <Setter TargetName="innerBorder" Property="Height" Value="4" />
+                                <Setter TargetName="innerBorder" Property="CornerRadius" Value="2" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="HorizontalSlider" TargetType="{x:Type Slider}">
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TickBar x:Name="TopTick" Visibility="Collapsed" Fill="LightGray" Placement="Top" SnapsToDevicePixels="True"
+                 Height="4" Margin="0,0,0,2" />
+                <Border x:Name="TrackBackground"
+                Grid.Row="1"
+                Margin="10,0"
+                BorderThickness="2"
+                BorderBrush="LightGray"
+                VerticalAlignment="Center" Height="4" />
+                <Track x:Name="PART_Track" Grid.Row="1">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Command="{x:Static Slider.DecreaseLarge}"  Style="{StaticResource SliderRepeatButtonStyle2}" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource SliderRepeatButtonStyle1}"/>
+                    </Track.IncreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb x:Name="Thumb" Style="{StaticResource SliderThumbStyle}" />
+                    </Track.Thumb>
+                </Track>
+                <TickBar x:Name="BottomTick" Grid.Row="2" Visibility="Collapsed" Fill="LightGray" Placement="Bottom"
+                 SnapsToDevicePixels="True" Height="4" Margin="0,2,0,0"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="TickPlacement" Value="TopLeft">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="BottomRight">
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="Both">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type Slider}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisualStyte}" />
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="MinWidth" Value="104" />
+                    <Setter Property="MinHeight" Value="21" />
+                    <Setter Property="Template" Value="{StaticResource HorizontalSlider}" />
+                </Trigger>
+                <!--
+                <Trigger Property="Orientation" Value="Vertical">
+                    <Setter Property="MinWidth" Value="21" />
+                    <Setter Property="MinHeight" Value="104" />
+                    <Setter Property="Template" Value="{StaticResource VerticalSlider}" />
+                </Trigger>
+                -->
+            </Style.Triggers>
+        </Style>
+
     </Window.Resources>
 
-    <Border BorderThickness="1,1,1,1" BorderBrush="LightGray">
+    <Border BorderThickness="1,1,1,1" BorderBrush="LightGray" x:Name="playerBorder">
         <StackPanel Background="#383e47">
             <Grid>
                 <Button Width="15" Height="15" Margin="382,0,1,0" Click="Close_app" FontSize="8">X</Button>
@@ -56,14 +191,14 @@
                 <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="154" Background="#424242" Margin="5,18,0,0"/>
                 <Label x:Name="elapsedTime" Content="Label" HorizontalAlignment="Left" Margin="163,17,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551" Foreground="#ffffff" />
                 <Label x:Name="duration" Content="Label" HorizontalAlignment="Left" Margin="204,17,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551" Foreground="#ffffff"/>
-                <Slider x:Name="volumeSlider" Margin="264,18,9,17" Orientation="Horizontal" Thumb.DragStarted="SliderVolume_DragStarted" Thumb.DragCompleted="SliderVolume_DragCompleted"/>
+                <Slider x:Name="volumeSlider" Margin="264,14,9,10" Orientation="Horizontal" Thumb.DragStarted="SliderVolume_DragStarted" Thumb.DragCompleted="SliderVolume_DragCompleted"/>
             </Grid>
 
             <Grid MouseWheel="Grid_MouseWheel"  Height="60" >
 
                 <Slider x:Name="durationSliderProgress" Thumb.DragStarted="SliderProgress_DragStarted" Thumb.DragCompleted="SliderProgress_DragCompleted" 
-                   ValueChanged="SliderProgress_ValueChanged"  HorizontalAlignment="Left" Margin="9,3,0,0" VerticalAlignment="Top" Height="25" Width="348"/>
-                <Button  HorizontalAlignment="Left" Margin="8,33,0,0" VerticalAlignment="Top" Width="40" Click="Play_Click" Background="Transparent">
+                   ValueChanged="SliderProgress_ValueChanged"  HorizontalAlignment="Left" Margin="-7,-4,0,0" VerticalAlignment="Top" Height="37" Width="191"/>
+                <Button  HorizontalAlignment="Left" Margin="8,33,0,0" VerticalAlignment="Top" Width="40" Click="Play_Click" Background="#453e47">
                     <StackPanel>
                         <Image Source="./Resources/play.png" Height="15" Width="15"/>
                     </StackPanel>
@@ -108,11 +243,14 @@
                         <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle1}"  >
                             <GridViewColumn Header="Artist" Width="380"/>
                         </GridView>
-
                     </ListView.View>
                 </ListView>
             </StackPanel>
+            <Grid Background="#222225" Height="20">
+                <Button Content="PLAYLIST" FontSize="8" Foreground="#ffffff" Click="ShowPlayList" Height="15" Width="100" Background="transparent" HorizontalAlignment="Center" BorderBrush="Transparent">
+
+                </Button>
+            </Grid>
         </StackPanel>
     </Border>
-
 </Window>
