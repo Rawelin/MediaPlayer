@@ -110,6 +110,12 @@
     <Resource Include="Resources\save.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\close.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\minimize.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\pause.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

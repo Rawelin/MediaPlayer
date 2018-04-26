@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Media_Player"
         mc:Ignorable="d"
-        Title="MainWindow" Height="170" Width="400" ResizeMode="NoResize" Icon="./Resources/play.png"
+        Title="MainWindow" Height="163" Width="400" ResizeMode="NoResize" Icon="./Resources/play.png"
         WindowStyle="None" MouseDown="Window_MouseDown">
 
 
@@ -177,28 +177,45 @@
 
     <Border BorderThickness="1,1,1,1" BorderBrush="LightGray" x:Name="playerBorder">
         <StackPanel Background="#383e47">
-            <Grid>
-                <Button Width="15" Height="15" Margin="382,0,1,0" Click="Close_app" FontSize="8">X</Button>
-                <Button Width="15" Height="15" Margin="366,0,17,0" Click="Minimize_app" FontSize="8">-</Button>
-            </Grid>
             <StackPanel>
-                <ProgressBar x:Name="durationProgressBar" HorizontalAlignment="Left" Height="4" VerticalAlignment="Top" Width="399"
-                     Value="{Binding ElementName=mePlayer, Path=Volume}" Foreground="#FF0187D3"/>
-                <ProgressBar x:Name="volumeProgressBar"   HorizontalAlignment="Left" Height="4" VerticalAlignment="Top" Width="399" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,3" Background="Transparent" BorderBrush="Transparent"/>
+                <ProgressBar x:Name="volumeProgressBar"   HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="399" RenderTransformOrigin="0.5,0.5"  Background="Transparent" BorderThickness="0" BorderBrush="Transparent"/>
+                <ProgressBar x:Name="durationProgressBar" HorizontalAlignment="Left" Height="3" VerticalAlignment="Top" Width="399"
+                     Value="{Binding Volume, ElementName=mePlayer}" Foreground="#FF0187D3" Margin="0,0,0,0" Background="Transparent" BorderBrush="Transparent" />
             </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90*"/>
+                    <ColumnDefinition Width="109*"/>
+                </Grid.ColumnDefinitions>
+                <Button Width="17" Height="15" Margin="197.667,0,0,0" Click="Close_app" Background="Transparent" Grid.Column="1" >
+                    <StackPanel>
+                        <Image Source="./Resources/close.ico" Height="10" Width="10" />
+                    </StackPanel>
+                </Button>
+                <Button Width="17" Height="15" Margin="180,0,22,0" Click="Minimize_app" Background="Transparent" VerticalAlignment="Top" Grid.Column="1">
+                    <StackPanel>
+                        <Image Source="./Resources/minimize.png" Height="10" Width="10" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
 
             <Grid Height="60">
-                <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="154" Background="#424242" Margin="5,18,0,0"/>
-                <Label x:Name="elapsedTime" Content="Label" HorizontalAlignment="Left" Margin="163,17,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551" Foreground="#ffffff" />
-                <Label x:Name="duration" Content="Label" HorizontalAlignment="Left" Margin="204,17,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551" Foreground="#ffffff"/>
-                <Slider x:Name="volumeSlider" Margin="264,14,9,10" Orientation="Horizontal" Thumb.DragStarted="SliderVolume_DragStarted" Thumb.DragCompleted="SliderVolume_DragCompleted"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="367*"/>
+                    <ColumnDefinition Width="31*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="textBox" IsReadOnly="True" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="No Track Selected" VerticalAlignment="Top" Width="154" Background="Transparent" Margin="5,18,0,0" Foreground="White" BorderBrush="Transparent"/>
+                <Label x:Name="elapsedTime" Content="0:00" HorizontalAlignment="Left" Margin="163,17,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551" Foreground="#ffffff" />
+                <Label x:Name="duration" Content="0:00" HorizontalAlignment="Left" Margin="204,17,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551" Foreground="#ffffff"/>
+                <Slider x:Name="volumeSlider" Margin="264,14,9,10" Orientation="Horizontal" Thumb.DragStarted="SliderVolume_DragStarted" Thumb.DragCompleted="SliderVolume_DragCompleted" Grid.ColumnSpan="2"/>
             </Grid>
 
             <Grid MouseWheel="Grid_MouseWheel"  Height="60" >
 
                 <Slider x:Name="durationSliderProgress" Thumb.DragStarted="SliderProgress_DragStarted" Thumb.DragCompleted="SliderProgress_DragCompleted" 
-                   ValueChanged="SliderProgress_ValueChanged"  HorizontalAlignment="Left" Margin="-7,-4,0,0" VerticalAlignment="Top" Height="37" Width="191"/>
-                <Button  HorizontalAlignment="Left" Margin="8,33,0,0" VerticalAlignment="Top" Width="40" Click="Play_Click" Background="#453e47">
+                   ValueChanged="SliderProgress_ValueChanged"  HorizontalAlignment="Left" Margin="2,-4,0,0" VerticalAlignment="Top" Height="37" Width="191"/>
+                <Button  HorizontalAlignment="Left" Margin="8,33,0,0" VerticalAlignment="Top" Width="40" Click="Play_Click" Background="transparent">
                     <StackPanel>
                         <Image Source="./Resources/play.png" Height="15" Width="15"/>
                     </StackPanel>

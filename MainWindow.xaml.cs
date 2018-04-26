@@ -57,8 +57,8 @@ namespace Media_Player
         {
             if(mediaPlayer.Source != null)
             {
-                elapsedTime.Content = string.Format("{0}", mediaPlayer.Position.ToString(@"hh\mm\:ss"));
-                duration.Content = string.Format("{0}", mediaPlayer.NaturalDuration.TimeSpan.ToString(@"hh\mm\:ss"));
+                elapsedTime.Content = string.Format("{0}", mediaPlayer.Position.ToString(@"m\:ss"));
+                duration.Content = string.Format("{0}", mediaPlayer.NaturalDuration.TimeSpan.ToString(@"m\:ss"));
 
                 durationProgressBar.Minimum = 0;
                 durationProgressBar.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
@@ -85,12 +85,19 @@ namespace Media_Player
 
         private void Play_Click(object sender, RoutedEventArgs e)
         {
-            int trackNumber = playLista.SelectedIndex;
-            this.textBox.Text = "Track nr: " + trackNumber.ToString();
-
+          
             if (tracks.Count != 0)
             {
-                if(trackNumber == -1)
+                int trackNumber = playLista.SelectedIndex;
+                string path = tracks[trackNumber].AbsolutePath.ToString();
+                char[] mychars = { '%' };
+
+                string newPath = path.TrimStart(mychars);
+
+
+                this.textBox.Text = newPath;
+
+                if (trackNumber == -1)
                 {
                     this.textBox.Text = "No Track Selected";
                 }
