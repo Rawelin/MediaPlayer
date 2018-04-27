@@ -90,12 +90,20 @@ namespace Media_Player
             {
                 int trackNumber = playLista.SelectedIndex;
                 string path = tracks[trackNumber].AbsolutePath.ToString();
-                char[] mychars = { '%' };
+                char[] mychars = { '/' };
 
-                string newPath = path.TrimStart(mychars);
+                // string newPath = path.TrimStart(mychars);
+                //  path.TrimStart(new Char[] { '/' });
 
-
-                this.textBox.Text = newPath;
+                path = path.Replace(@"%", "");
+                path = path.Replace(@"2", "");
+                path = path.Replace(@"0", " ");
+              
+                int foundS1 = path.LastIndexOf("/");
+             
+                path = path.Remove(0, foundS1 + 1);
+               
+                this.textBox.Text = path;
 
                 if (trackNumber == -1)
                 {
@@ -304,7 +312,7 @@ namespace Media_Player
             {
                 playLista.MaxHeight = 260;
                 listStack.Height = 260;
-                Application.Current.MainWindow.Height = 430;
+                Application.Current.MainWindow.Height = 423;
 
                 playListFlag = false;
             }
@@ -312,7 +320,7 @@ namespace Media_Player
             {
                 playLista.MaxHeight = 0;
                 listStack.Height = 0;
-                Application.Current.MainWindow.Height = 170;
+                Application.Current.MainWindow.Height = 163;
 
                 playListFlag = true;
             }
