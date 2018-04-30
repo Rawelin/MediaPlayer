@@ -57,25 +57,29 @@ namespace Media_Player
         {
             if(mediaPlayer.Source != null)
             {
-                elapsedTime.Content = string.Format("{0}", mediaPlayer.Position.ToString(@"m\:ss"));
-                duration.Content = string.Format("{0}", mediaPlayer.NaturalDuration.TimeSpan.ToString(@"m\:ss"));
 
-                durationProgressBar.Minimum = 0;
-                durationProgressBar.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
-                durationProgressBar.Value = mediaPlayer.Position.TotalSeconds;
+                if(mediaPlayer.NaturalDuration.HasTimeSpan)
+                {
+                    elapsedTime.Content = string.Format("{0}", mediaPlayer.Position.ToString(@"m\:ss"));
+                    duration.Content = string.Format("{0}", mediaPlayer.NaturalDuration.TimeSpan.ToString(@"m\:ss"));
 
-                durationSliderProgress.Minimum = 0;
-                durationSliderProgress.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
-                durationSliderProgress.Value = mediaPlayer.Position.TotalSeconds;
+                    durationProgressBar.Minimum = 0;
+                    durationProgressBar.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+                    durationProgressBar.Value = mediaPlayer.Position.TotalSeconds;
 
-                volumeProgressBar.Minimum = 0;
-                volumeProgressBar.Maximum = 1.0;
-                volumeProgressBar.SmallChange = 0.1;
-                volumeProgressBar.Value = mediaPlayer.Volume;
+                    durationSliderProgress.Minimum = 0;
+                    durationSliderProgress.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+                    durationSliderProgress.Value = mediaPlayer.Position.TotalSeconds;
 
-                volumeSlider.Minimum = 0;
-                volumeSlider.Maximum = 1;
-                volumeSlider.Value = mediaPlayer.Volume;
+                    volumeProgressBar.Minimum = 0;
+                    volumeProgressBar.Maximum = 1.0;
+                    volumeProgressBar.SmallChange = 0.1;
+                    volumeProgressBar.Value = mediaPlayer.Volume;
+
+                    volumeSlider.Minimum = 0;
+                    volumeSlider.Maximum = 1;
+                    volumeSlider.Value = mediaPlayer.Volume;
+                }
             }
             else
             {
