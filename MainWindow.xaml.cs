@@ -42,10 +42,17 @@ namespace Media_Player
         }
         private void AddToList()
         {
-          this.playLista.Items.Clear();
+            this.playLista.Items.Clear();
 
-          for (int i = 0; i < tracks.Count; i++)
-            this.playLista.Items.Add(tracks.ElementAt(i));
+            string path, trimmedPath;
+
+            for (int i = 0; i < tracks.Count; i++)
+            {
+                path = tracks[i].AbsolutePath.ToString();
+                trimmedPath = Utility.TrimPath(path);
+                this.playLista.Items.Add(trimmedPath);
+            }
+              
 
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
@@ -83,7 +90,7 @@ namespace Media_Player
             }
             else
             {
-                elapsedTime.Content = "No file selected";
+                this.textBox.Text = "No file selected";
             }
         }
 
@@ -94,20 +101,10 @@ namespace Media_Player
             {
                 int trackNumber = playLista.SelectedIndex;
                 string path = tracks[trackNumber].AbsolutePath.ToString();
-                char[] mychars = { '/' };
 
-                // string newPath = path.TrimStart(mychars);
-                //  path.TrimStart(new Char[] { '/' });
+                string trimmedPath = Utility.TrimPath(path);
 
-                path = path.Replace(@"%", "");
-                path = path.Replace(@"2", "");
-                path = path.Replace(@"0", " ");
-              
-                int foundS1 = path.LastIndexOf("/");
-             
-                path = path.Remove(0, foundS1 + 1);
-               
-                this.textBox.Text = path;
+                this.textBox.Text = trimmedPath;
 
                 if (trackNumber == -1)
                 {
@@ -207,7 +204,7 @@ namespace Media_Player
         {
             volumeDarggSlider = false;
             mediaPlayer.Volume = volumeSlider.Value;
-            this.textBox.Text = "volume:" + mediaPlayer.Volume.ToString(); 
+          //  this.textBox.Text = "volume:" + mediaPlayer.Volume.ToString(); 
         }
 
         private void VolumeUp_Click(object sender, RoutedEventArgs e)
@@ -222,8 +219,14 @@ namespace Media_Player
 
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+           
+
             int trackNumber = playLista.SelectedIndex;
-            this.textBox.Text = "Track nr: " + trackNumber.ToString();
+            string path = tracks[trackNumber].AbsolutePath.ToString();
+
+            string trimmedPath = Utility.TrimPath(path);
+
+            this.textBox.Text = trimmedPath;
 
             if (tracks.Count != 0)
             {
@@ -328,6 +331,13 @@ namespace Media_Player
 
                 playListFlag = true;
             }
+        }
+
+        private void ListView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.textBox.Text = "Drag";
+            DataObject data = new DataObject(DataFormats.Text, ((ListViewItem)e.Source).Content);
+            DragDrop.DoDragDrop((DependencyObject)e.Source, data, DragDropEffects.Copy);       
         }
     }
 }

@@ -28,7 +28,6 @@
         </Style>
 
         <Style TargetType="{x:Type ListViewItem}">
-
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="true" >
                     <Setter Property="Foreground" Value="Black" />
@@ -199,15 +198,15 @@
                 </Button>
             </Grid>
 
-
             <Grid Height="60">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="367*"/>
                     <ColumnDefinition Width="31*"/>
                 </Grid.ColumnDefinitions>
                 <TextBox x:Name="textBox" IsReadOnly="True" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="No Track Selected" VerticalAlignment="Top" Width="154" Background="Transparent" Margin="5,18,0,0" Foreground="White" BorderBrush="Transparent"/>
-                <Label x:Name="elapsedTime" Content="0:00" HorizontalAlignment="Left" Margin="163,17,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551" Foreground="#ffffff" />
-                <Label x:Name="duration" Content="0:00" HorizontalAlignment="Left" Margin="204,17,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551" Foreground="#ffffff"/>
+                <Label x:Name="elapsedTime" Content="00:00" HorizontalAlignment="Left" Margin="165,17,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551" Foreground="#ffffff"  />
+                <Label x:Name="pipe" Width="15" Content="|" HorizontalAlignment="Left" Margin="200,17,0,0" Foreground="#ffffff" />
+                <Label x:Name="duration" Content="00:00" HorizontalAlignment="Left" Margin="210,17,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.433,0.551" Foreground="#5734b4e3"/>
                 <Slider x:Name="volumeSlider" Margin="264,14,9,10" Orientation="Horizontal" Thumb.DragStarted="SliderVolume_DragStarted" Thumb.DragCompleted="SliderVolume_DragCompleted" Grid.ColumnSpan="2"/>
             </Grid>
 
@@ -244,7 +243,16 @@
                 </Button>
                 <Button HorizontalAlignment="Left" Margin="268,33,0,0" VerticalAlignment="Top" Width="40" Click="Load_Click" Background="Transparent">
                     <StackPanel>
-                        <Image Source="./Resources/load.png" Height="15" Width="15" />
+                        <Image Source="./Resources/load.png" Height="15" Width="15" >
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="7.352"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
                     </StackPanel>
                 </Button>
                 <Button HorizontalAlignment="Left" Margin="351,33,0,0" VerticalAlignment="Top" Width="40" Click="ShowPlayList" Background="Transparent" Height="21">
@@ -254,13 +262,14 @@
                 <ListView x:Name="playLista"  HorizontalAlignment="Left"  Margin="1,3,0,0"  VerticalAlignment="Top" Width="396" MaxHeight="0"
                   RenderTransformOrigin="0.485,0.765"  MouseDoubleClick="ListView_MouseDoubleClick" Background="#222225" 
                    BorderBrush="#FF343A44" Foreground="White" 
-                   AllowDrop="True" >
+                   AllowDrop="True" MouseLeftButtonDown="ListView_MouseLeftButtonDown" >
 
                     <ListView.View >
                         <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle1}"  >
                             <GridViewColumn Header="Artist" Width="380"/>
                         </GridView>
                     </ListView.View>
+
                 </ListView>
             </StackPanel>
             <Grid Background="#222225" Height="20">
