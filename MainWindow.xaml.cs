@@ -319,7 +319,7 @@ namespace Media_Player
             {
                 playLista.MaxHeight = 260;
                 listStack.Height = 260;
-                Application.Current.MainWindow.Height = 423;
+                Application.Current.MainWindow.Height = 393;
 
                 playListFlag = false;
             }
@@ -327,7 +327,7 @@ namespace Media_Player
             {
                 playLista.MaxHeight = 0;
                 listStack.Height = 0;
-                Application.Current.MainWindow.Height = 163;
+                Application.Current.MainWindow.Height = 133;
 
                 playListFlag = true;
             }
