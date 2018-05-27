@@ -24,21 +24,21 @@ namespace Media_Player
     /// </summary>
     public partial class MainWindow : Window
     {
-        public List<Song> songsList;
-        public List<Uri> tracks;
+        
+        public List<Uri> trackList;
         private MediaPlayer mediaPlayer = new MediaPlayer();
         private bool draggSlider = false;
         private bool volumeDarggSlider = false;
         private bool isPaused = false;
         private bool playListFlag = true;
-        
+
+        private int globaTrackNumber;
 
         public MainWindow()
         {
             InitializeComponent();
-           
-            tracks = new List<Uri>();
-          
+
+            trackList = new List<Uri>();
         }
         private void AddToList()
         {
@@ -46,9 +46,9 @@ namespace Media_Player
 
             string path, trimmedPath;
 
-            for (int i = 0; i < tracks.Count; i++)
+            for (int i = 0; i < trackList.Count; i++)
             {
-                path = tracks[i].AbsolutePath.ToString();
+                path = trackList[i].AbsolutePath.ToString();
                 trimmedPath = Utility.TrimPath(path);
                 this.playLista.Items.Add(trimmedPath);
             }
@@ -96,11 +96,12 @@ namespace Media_Player
 
         private void Play_Click(object sender, RoutedEventArgs e)
         {
-          
-            if (tracks.Count != 0)
+            globaTrackNumber = playLista.SelectedIndex;
+
+            if (trackList.Count != 0)
             {
                 int trackNumber = playLista.SelectedIndex;
-                string path = tracks[trackNumber].AbsolutePath.ToString();
+                string path = trackList[trackNumber].AbsolutePath.ToString();
 
                 string trimmedPath = Utility.TrimPath(path);
 
@@ -114,7 +115,7 @@ namespace Media_Player
                 {
                     if (!isPaused)
                     {
-                        mediaPlayer.Open(tracks[trackNumber]);
+                        mediaPlayer.Open(trackList[trackNumber]);
                         mediaPlayer.Play();
                     }
                     else
@@ -149,6 +150,38 @@ namespace Media_Player
             mediaPlayer.Stop();
         }
 
+        private void Forward_Click(object sender, RoutedEventArgs e)
+        {
+            globaTrackNumber++;
+
+            if (globaTrackNumber == trackList.Count)
+                globaTrackNumber = 0;
+
+            mediaPlayer.Open(trackList[globaTrackNumber]);
+            mediaPlayer.Play();
+
+            string path = trackList[globaTrackNumber].AbsolutePath.ToString();
+            string trimmedPath = Utility.TrimPath(path);
+
+            this.textBox.Text = trimmedPath;
+
+        }
+
+        private void Backward_Click(object sender, RoutedEventArgs e)
+        {
+            globaTrackNumber--;
+            if (globaTrackNumber == -1)
+                globaTrackNumber = trackList.Count - 1;
+
+            mediaPlayer.Open(trackList[globaTrackNumber]);
+            mediaPlayer.Play();
+
+            string path = trackList[globaTrackNumber].AbsolutePath.ToString();
+            string trimmedPath = Utility.TrimPath(path);
+
+            this.textBox.Text = trimmedPath;
+        }
+
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -167,7 +200,7 @@ namespace Media_Player
                     try
                     {
                         Uri uriAddress = new Uri(file);
-                        tracks.Add(uriAddress);
+                        trackList.Add(uriAddress);
                     }
                     catch (Exception ex)
                     {
@@ -219,16 +252,16 @@ namespace Media_Player
 
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-           
+            globaTrackNumber = playLista.SelectedIndex;
 
             int trackNumber = playLista.SelectedIndex;
-            string path = tracks[trackNumber].AbsolutePath.ToString();
+            string path = trackList[trackNumber].AbsolutePath.ToString();
 
             string trimmedPath = Utility.TrimPath(path);
 
             this.textBox.Text = trimmedPath;
 
-            if (tracks.Count != 0)
+            if (trackList.Count != 0)
             {
                 if (trackNumber == -1)
                 {
@@ -236,7 +269,7 @@ namespace Media_Player
                 }
                 else
                 {
-                    mediaPlayer.Open(tracks[trackNumber]);
+                    mediaPlayer.Open(trackList[trackNumber]);
                     mediaPlayer.Play();
                 }
             }
@@ -262,9 +295,9 @@ namespace Media_Player
             {
                 List<string> stringTracks = new List<string>();
 
-                for(int i = 0; i < tracks.Count(); i++)
+                for(int i = 0; i < trackList.Count(); i++)
                 {
-                    stringTracks.Add(tracks[i].ToString());
+                    stringTracks.Add(trackList[i].ToString());
                 }
                 XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
                 serializer.Serialize(fileStream, stringTracks);
@@ -288,12 +321,30 @@ namespace Media_Player
                 }
             }
 
-            tracks.Clear();
+            trackList.Clear();
 
             for (int i = 0; i < stringTracks.Count(); i++)
             {
-                tracks.Add(new Uri(stringTracks[i]));
+                trackList.Add(new Uri(stringTracks[i]));
             }
+            AddToList();
+
+            playLista.MaxHeight = 260;
+            listStack.Height = 260;
+            Application.Current.MainWindow.Height = 393;
+
+            playListFlag = false;
+
+        }
+
+
+        private void Deletet_Click(object sender, RoutedEventArgs e)
+        {
+            int trackNumber = -1;
+            trackNumber = playLista.SelectedIndex;
+
+            if(trackNumber != -1)
+                 trackList.RemoveAt(trackNumber);
             AddToList();
         }
 
@@ -327,7 +378,7 @@ namespace Media_Player
             {
                 playLista.MaxHeight = 0;
                 listStack.Height = 0;
-                Application.Current.MainWindow.Height = 133;
+                Application.Current.MainWindow.Height = 135;
 
                 playListFlag = true;
             }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Media_Player"
         mc:Ignorable="d"
-        Title="MainWindow" Height="133" Width="400" ResizeMode="NoResize" Icon="./Resources/play.png"
+        Title="MainWindow" Height="135" Width="400" ResizeMode="NoResize" Icon="./Resources/play.png"
         WindowStyle="None" MouseDown="Window_MouseDown">
 
 
@@ -213,8 +213,8 @@
 
                 <Slider x:Name="durationSliderProgress" Thumb.DragStarted="SliderProgress_DragStarted" Thumb.DragCompleted="SliderProgress_DragCompleted" 
                    ValueChanged="SliderProgress_ValueChanged"  HorizontalAlignment="Left" Margin="141,5,0,0" VerticalAlignment="Top" Height="28" Width="238"/>
-                <Slider x:Name="volumeSlider" Margin="142,25,19,-1" Orientation="Horizontal" Thumb.DragStarted="SliderVolume_DragStarted" Thumb.DragCompleted="SliderVolume_DragCompleted"/>
-                <Button  HorizontalAlignment="Left" Margin="8,7,0,0" VerticalAlignment="Top" Width="40" Click="Play_Click" Background="transparent">
+                <Slider x:Name="volumeSlider" Margin="261,25,19,-1" Orientation="Horizontal" Thumb.DragStarted="SliderVolume_DragStarted" Thumb.DragCompleted="SliderVolume_DragCompleted"/>
+                <Button  HorizontalAlignment="Left" Margin="8,7,0,0" VerticalAlignment="Top" Width="40" Click="Play_Click" Background="transparent" ToolTip="Play">
                     <StackPanel>
                         <Image Source="./Resources/play.png" Height="15" Width="15"/>
                     </StackPanel>
@@ -229,30 +229,34 @@
                         <Image Source="./Resources/stop.png" Height="15" Width="15" />
                     </StackPanel>
                 </Button>
-                <Button HorizontalAlignment="Left" Margin="96,33,0,0" VerticalAlignment="Top" Width="40" Click="Add_Click" RenderTransformOrigin="1.675,0.409" Background="Transparent">
+                <Button HorizontalAlignment="Left" Margin="180,33,0,0" VerticalAlignment="Top" Width="40" Click="Add_Click" RenderTransformOrigin="1.675,0.409" Background="Transparent">
                     <StackPanel>
                         <Image Source="./Resources/add.png" Height="15" Width="15" />
                     </StackPanel>
                 </Button>
-                <Button HorizontalAlignment="Left" Margin="53,33,0,0" VerticalAlignment="Top" Width="40" Click="Save_Click" Background="Transparent">
+                <Button HorizontalAlignment="Left" Margin="139,33,0,0" VerticalAlignment="Top" Width="40" Click="Save_Click" Background="Transparent">
                     <StackPanel>
                         <Image Source="./Resources/save.png" Height="15" Width="15" />
                     </StackPanel>
                 </Button>
-                <Button HorizontalAlignment="Left" Margin="9,33,0,0" VerticalAlignment="Top" Width="40" Click="Load_Click" Background="Transparent">
+                <Button HorizontalAlignment="Left" Margin="97,33,0,0" VerticalAlignment="Top" Width="40" Click="Load_Click" Background="Transparent">
                     <StackPanel>
-                        <Image Source="./Resources/load.png" Height="15" Width="15" >
-                            <Image.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform Angle="7.352"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </Image.RenderTransform>
-                        </Image>
+                        <Image Source="./Resources/load.png" Height="15" Width="15"/>
                     </StackPanel>
                 </Button>
+                <Button  Width="40" Height="20" Margin="222,34,136,6" Click="Deletet_Click" Background="Transparent">
+                    <StackPanel>
+                        <Image Source="./Resources/remove.png" Height="14" Width="15" RenderTransformOrigin="0.556,-0.244"/>
+                    </StackPanel>
+                </Button>
+                <Button  Width="40" Height="20" Margin="9,34,349,6" Click="Forward_Click" Background="Transparent">
+                   F
+                </Button>
+                <Button  Width="40" Height="20" Margin="53,34,305,6" Click="Backward_Click" Background="Transparent">
+                   B
+                </Button>
+
+
             </Grid>
             <StackPanel>
                 <ProgressBar x:Name="durationProgressBar" HorizontalAlignment="Left" Height="4" VerticalAlignment="Top" Width="399"
@@ -261,7 +265,7 @@
             <StackPanel x:Name="listStack" Height="0" Background="#222225">
                 <ListView x:Name="playLista"  HorizontalAlignment="Left"  Margin="1,3,0,0"  VerticalAlignment="Top" Width="396" MaxHeight="0"
                   RenderTransformOrigin="0.485,0.765"  MouseDoubleClick="ListView_MouseDoubleClick" Background="#222225" 
-                   BorderBrush="#FF343A44" Foreground="White" 
+                  BorderBrush="#FF343A44" Foreground="White" 
                    AllowDrop="True" MouseLeftButtonDown="ListView_MouseLeftButtonDown" >
 
                     <ListView.View >
@@ -277,7 +281,7 @@
                     <ColumnDefinition Width="18*"/>
                     <ColumnDefinition Width="181*"/>
                 </Grid.ColumnDefinitions>
-                <Button Content="PLAYLIST" FontSize="8" Foreground="#ffffff" Click="ShowPlayList" Height="15" Width="100" Background="transparent" HorizontalAlignment="Center" BorderBrush="Transparent" Margin="113.333,2,149,3" Grid.Column="1">
+                <Button Content="PLAYLIST" FontSize="8" Foreground="#ffffff" Click="ShowPlayList" Height="16" Width="100" Background="transparent" HorizontalAlignment="Center" BorderBrush="Transparent" Margin="113.333,2,149,3" Grid.Column="1">
 
                 </Button>
             </Grid>
