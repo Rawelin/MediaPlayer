@@ -34,8 +34,8 @@
                     <Setter Property="Background" Value="Gray" />
                 </Trigger>
                 <Trigger Property="IsSelected" Value="true" >
-                    <Setter Property="Foreground" Value="Black" />
-                    <Setter Property="Background" Value="Gray" />
+                    <Setter Property="Foreground" Value="#fff" />
+                    <Setter Property="Background" Value="#5734b4e3" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -219,41 +219,41 @@
                         <Image Source="./Resources/play.png" Height="15" Width="15"/>
                     </StackPanel>
                 </Button>
-                <Button HorizontalAlignment="Left" Margin="52,7,0,0" VerticalAlignment="Top" Width="40" Click="Pause_Click" Background="Transparent" >
+                <Button HorizontalAlignment="Left" Margin="52,7,0,0" VerticalAlignment="Top" Width="40" Click="Pause_Click" Background="Transparent" ToolTip="Pause" >
                     <StackPanel>
                         <Image Source="./Resources/pause.png" Height="15" Width="15"/>
                     </StackPanel>
                 </Button>
-                <Button  HorizontalAlignment="Left" Margin="97,7,0,0" VerticalAlignment="Top" Width="40" Click="Stop_Click" Background="Transparent">
+                <Button  HorizontalAlignment="Left" Margin="97,7,0,0" VerticalAlignment="Top" Width="40" Click="Stop_Click" Background="Transparent" ToolTip="Stop">
                     <StackPanel>
                         <Image Source="./Resources/stop.png" Height="15" Width="15" />
                     </StackPanel>
                 </Button>
-                <Button HorizontalAlignment="Left" Margin="180,33,0,0" VerticalAlignment="Top" Width="40" Click="Add_Click" RenderTransformOrigin="1.675,0.409" Background="Transparent">
+                <Button HorizontalAlignment="Left" Margin="180,33,0,0" VerticalAlignment="Top" Width="40" Click="Add_Click" RenderTransformOrigin="1.675,0.409" Background="Transparent" ToolTip="Add Song">
                     <StackPanel>
                         <Image Source="./Resources/add.png" Height="15" Width="15" />
                     </StackPanel>
                 </Button>
-                <Button HorizontalAlignment="Left" Margin="139,33,0,0" VerticalAlignment="Top" Width="40" Click="Save_Click" Background="Transparent">
+                <Button HorizontalAlignment="Left" Margin="139,33,0,0" VerticalAlignment="Top" Width="40" Click="Save_Click" Background="Transparent" ToolTip="Save Playlist">
                     <StackPanel>
                         <Image Source="./Resources/save.png" Height="15" Width="15" />
                     </StackPanel>
                 </Button>
-                <Button HorizontalAlignment="Left" Margin="97,33,0,0" VerticalAlignment="Top" Width="40" Click="Load_Click" Background="Transparent">
+                <Button HorizontalAlignment="Left" Margin="97,33,0,0" VerticalAlignment="Top" Width="40" Click="Load_Click" Background="Transparent" ToolTip="Load Playlist">
                     <StackPanel>
                         <Image Source="./Resources/load.png" Height="15" Width="15"/>
                     </StackPanel>
                 </Button>
-                <Button  Width="40" Height="20" Margin="222,34,136,6" Click="Deletet_Click" Background="Transparent">
+                <Button  Width="40" Height="20" Margin="222,34,136,6" Click="Deletet_Click" Background="Transparent" ToolTip="Delete Song">
                     <StackPanel>
                         <Image Source="./Resources/remove.png" Height="14" Width="15" RenderTransformOrigin="0.556,-0.244"/>
                     </StackPanel>
                 </Button>
-                <Button  Width="40" Height="20" Margin="9,34,349,6" Click="Forward_Click" Background="Transparent">
-                   F
+                <Button  Width="40" Height="20" Margin="53,34,305,6" Click="Forward_Click" Background="Transparent" ToolTip="Next Song">
+                    <Image Source="./Resources/down.png" Height="14" Width="15" RenderTransformOrigin="0.556,-0.244"/>
                 </Button>
-                <Button  Width="40" Height="20" Margin="53,34,305,6" Click="Backward_Click" Background="Transparent">
-                   B
+                <Button  Width="40" Height="20" Margin="9,34,349,6" Click="Backward_Click" Background="Transparent" ToolTip="Previous Song">
+                    <Image Source="./Resources/up.png" Height="14" Width="15" RenderTransformOrigin="0.556,-0.244"/>
                 </Button>
 
 

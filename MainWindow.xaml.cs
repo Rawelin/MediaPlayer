@@ -37,8 +37,11 @@ namespace Media_Player
         public MainWindow()
         {
             InitializeComponent();
-
+          
             trackList = new List<Uri>();
+
+            rememberLastListSongsOpened();
+            autoListViewOpen();
         }
         private void AddToList()
         {
@@ -101,15 +104,10 @@ namespace Media_Player
             if (trackList.Count != 0)
             {
                 int trackNumber = playLista.SelectedIndex;
-                string path = trackList[trackNumber].AbsolutePath.ToString();
-
-                string trimmedPath = Utility.TrimPath(path);
-
-                this.textBox.Text = trimmedPath;
 
                 if (trackNumber == -1)
                 {
-                    this.textBox.Text = "No Track Selected";
+                   this.textBox.Text = "No Track Selected";
                 }
                 else
                 {
@@ -120,6 +118,11 @@ namespace Media_Player
                     }
                     else
                     {
+                        string path = trackList[trackNumber].AbsolutePath.ToString();
+                        string trimmedPath = Utility.TrimPath(path);
+
+                        this.textBox.Text = trimmedPath;
+
                         mediaPlayer.Play();
                         isPaused = false;
                     }               
@@ -165,13 +168,19 @@ namespace Media_Player
 
             this.textBox.Text = trimmedPath;
 
+            playLista.SelectedItem = playLista.Items.GetItemAt(globaTrackNumber);
+            playLista.ScrollIntoView(playLista.SelectedItem);
+            ListViewItem item = playLista.ItemContainerGenerator.ContainerFromItem(playLista.SelectedItem) as ListViewItem;
+            item.Focus();
         }
 
         private void Backward_Click(object sender, RoutedEventArgs e)
         {
+
             globaTrackNumber--;
-            if (globaTrackNumber == -1)
-                globaTrackNumber = trackList.Count - 1;
+
+            if (globaTrackNumber <= 0)
+                globaTrackNumber = 0;
 
             mediaPlayer.Open(trackList[globaTrackNumber]);
             mediaPlayer.Play();
@@ -180,6 +189,12 @@ namespace Media_Player
             string trimmedPath = Utility.TrimPath(path);
 
             this.textBox.Text = trimmedPath;
+
+            playLista.SelectedItem = playLista.Items.GetItemAt(globaTrackNumber);
+            playLista.ScrollIntoView(playLista.SelectedItem);
+            ListViewItem item = playLista.ItemContainerGenerator.ContainerFromItem(playLista.SelectedItem) as ListViewItem;
+            item.Focus();
+           
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -277,7 +292,6 @@ namespace Media_Player
             {
                 this.textBox.Text = "No Track Selected";
             }
-
         }
 
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -319,24 +333,35 @@ namespace Media_Player
                 {
                     stringTracks = (List<string>)serializer.Deserialize(fileStream);
                 }
+
+                trackList.Clear();
+
+                for (int i = 0; i < stringTracks.Count(); i++)
+                {
+                    trackList.Add(new Uri(stringTracks[i]));
+                }
+                AddToList();
             }
-
-            trackList.Clear();
-
-            for (int i = 0; i < stringTracks.Count(); i++)
-            {
-                trackList.Add(new Uri(stringTracks[i]));
-            }
-            AddToList();
-
+       
             playLista.MaxHeight = 260;
             listStack.Height = 260;
             Application.Current.MainWindow.Height = 393;
 
             playListFlag = false;
 
-        }
+            using (Stream fileStream = new FileStream("temp.xml", FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                List<string> stringTracks2 = new List<string>();
 
+                for (int i = 0; i < trackList.Count(); i++)
+                {
+                    stringTracks2.Add(trackList[i].ToString());
+                }
+                XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
+                serializer.Serialize(fileStream, stringTracks2);
+            }
+
+        }
 
         private void Deletet_Click(object sender, RoutedEventArgs e)
         {
@@ -389,6 +414,36 @@ namespace Media_Player
             this.textBox.Text = "Drag";
             DataObject data = new DataObject(DataFormats.Text, ((ListViewItem)e.Source).Content);
             DragDrop.DoDragDrop((DependencyObject)e.Source, data, DragDropEffects.Copy);       
+        }
+
+        private void rememberLastListSongsOpened()
+        {
+            List<string> stringTracks = new List<string>();
+
+            XmlSerializer serializer = new XmlSerializer(typeof(List<String>));
+
+            using (FileStream fileStream = File.OpenRead("temp.xml"))
+            {
+                stringTracks = (List<string>)serializer.Deserialize(fileStream);
+            }
+
+            for (int i = 0; i < stringTracks.Count(); i++)
+            {
+                trackList.Add(new Uri(stringTracks[i]));
+            }
+            AddToList();
+        }
+
+        private void autoListViewOpen()
+        {
+            if(trackList.Count > 0)
+            {
+                playLista.MaxHeight = 260;
+                listStack.Height = 260;
+                Application.Current.MainWindow.Height = 393;
+
+                playListFlag = false;
+            }
         }
     }
 }
