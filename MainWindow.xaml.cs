@@ -31,8 +31,11 @@ namespace Media_Player
         private bool volumeDarggSlider = false;
         private bool isPaused = false;
         private bool playListFlag = true;
+        private bool repeatList = false;
+        private bool repeatSong = false;
 
         private int globaTrackNumber;
+        private int a, b;
 
         public MainWindow()
         {
@@ -62,10 +65,10 @@ namespace Media_Player
             timer.Tick += TickTimer;
             timer.Start();
         }
-        
+
         private void TickTimer(object sender, EventArgs e)
         {
-            if(mediaPlayer.Source != null)
+            if (mediaPlayer.Source != null)
             {
 
                 if(mediaPlayer.NaturalDuration.HasTimeSpan)
@@ -93,8 +96,34 @@ namespace Media_Player
             }
             else
             {
-                this.textBox.Text = "No file selected";
+                mediaPlayer.MediaEnded += new EventHandler(Media_Ended);
+                textBox.Text = "No file selected";
+
             }
+        }
+
+        private void Media_Ended(object sender, EventArgs e)
+        {
+            if(repeatSong == true)
+                mediaPlayer.Position = TimeSpan.Zero;
+
+            if(repeatList == true)
+            {
+                globaTrackNumber++;
+
+                if (globaTrackNumber == trackList.Count)
+                    globaTrackNumber = 0;
+
+                mediaPlayer.Open(trackList[globaTrackNumber]);
+                mediaPlayer.Play();
+
+                playLista.SelectedItem = playLista.Items.GetItemAt(globaTrackNumber);
+                playLista.ScrollIntoView(playLista.SelectedItem);
+                ListViewItem item = playLista.ItemContainerGenerator.ContainerFromItem(playLista.SelectedItem) as ListViewItem;
+                item.Focus();
+            }
+           
+
         }
 
         private void Play_Click(object sender, RoutedEventArgs e)
@@ -155,46 +184,50 @@ namespace Media_Player
 
         private void Forward_Click(object sender, RoutedEventArgs e)
         {
-            globaTrackNumber++;
+            if(playListFlag == false)
+            {
+                globaTrackNumber++;
 
-            if (globaTrackNumber == trackList.Count)
-                globaTrackNumber = 0;
+                if (globaTrackNumber == trackList.Count)
+                    globaTrackNumber = 0;
 
-            mediaPlayer.Open(trackList[globaTrackNumber]);
-            mediaPlayer.Play();
+                mediaPlayer.Open(trackList[globaTrackNumber]);
+                mediaPlayer.Play();
 
-            string path = trackList[globaTrackNumber].AbsolutePath.ToString();
-            string trimmedPath = Utility.TrimPath(path);
+                string path = trackList[globaTrackNumber].AbsolutePath.ToString();
+                string trimmedPath = Utility.TrimPath(path);
 
-            this.textBox.Text = trimmedPath;
+                this.textBox.Text = trimmedPath;
 
-            playLista.SelectedItem = playLista.Items.GetItemAt(globaTrackNumber);
-            playLista.ScrollIntoView(playLista.SelectedItem);
-            ListViewItem item = playLista.ItemContainerGenerator.ContainerFromItem(playLista.SelectedItem) as ListViewItem;
-            item.Focus();
+                playLista.SelectedItem = playLista.Items.GetItemAt(globaTrackNumber);
+                playLista.ScrollIntoView(playLista.SelectedItem);
+                ListViewItem item = playLista.ItemContainerGenerator.ContainerFromItem(playLista.SelectedItem) as ListViewItem;
+                item.Focus();
+            }
         }
 
         private void Backward_Click(object sender, RoutedEventArgs e)
         {
+            if (playListFlag == false)
+            {
+                globaTrackNumber--;
 
-            globaTrackNumber--;
+                if (globaTrackNumber <= 0)
+                    globaTrackNumber = 0;
 
-            if (globaTrackNumber <= 0)
-                globaTrackNumber = 0;
+                mediaPlayer.Open(trackList[globaTrackNumber]);
+                mediaPlayer.Play();
 
-            mediaPlayer.Open(trackList[globaTrackNumber]);
-            mediaPlayer.Play();
+                string path = trackList[globaTrackNumber].AbsolutePath.ToString();
+                string trimmedPath = Utility.TrimPath(path);
 
-            string path = trackList[globaTrackNumber].AbsolutePath.ToString();
-            string trimmedPath = Utility.TrimPath(path);
+                this.textBox.Text = trimmedPath;
 
-            this.textBox.Text = trimmedPath;
-
-            playLista.SelectedItem = playLista.Items.GetItemAt(globaTrackNumber);
-            playLista.ScrollIntoView(playLista.SelectedItem);
-            ListViewItem item = playLista.ItemContainerGenerator.ContainerFromItem(playLista.SelectedItem) as ListViewItem;
-            item.Focus();
-           
+                playLista.SelectedItem = playLista.Items.GetItemAt(globaTrackNumber);
+                playLista.ScrollIntoView(playLista.SelectedItem);
+                ListViewItem item = playLista.ItemContainerGenerator.ContainerFromItem(playLista.SelectedItem) as ListViewItem;
+                item.Focus();
+            }   
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -223,6 +256,15 @@ namespace Media_Player
                     }
                 }
             }
+            AddToList();
+        }
+        private void Deleted_Click(object sender, RoutedEventArgs e)
+        {
+            int trackNumber = -1;
+            trackNumber = playLista.SelectedIndex;
+
+            if (trackNumber != -1)
+                trackList.RemoveAt(trackNumber);
             AddToList();
         }
 
@@ -315,7 +357,9 @@ namespace Media_Player
                 }
                 XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
                 serializer.Serialize(fileStream, stringTracks);
-            }    
+            }
+
+            saveTempList();
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
@@ -349,34 +393,8 @@ namespace Media_Player
 
             playListFlag = false;
 
-            using (Stream fileStream = new FileStream("temp.xml", FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                List<string> stringTracks2 = new List<string>();
+            saveTempList();
 
-                for (int i = 0; i < trackList.Count(); i++)
-                {
-                    stringTracks2.Add(trackList[i].ToString());
-                }
-                XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
-                serializer.Serialize(fileStream, stringTracks2);
-            }
-
-        }
-
-        private void Deletet_Click(object sender, RoutedEventArgs e)
-        {
-            int trackNumber = -1;
-            trackNumber = playLista.SelectedIndex;
-
-            if(trackNumber != -1)
-                 trackList.RemoveAt(trackNumber);
-            AddToList();
-        }
-
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
         }
 
         private void Close_app(object sender, RoutedEventArgs e)
@@ -409,11 +427,54 @@ namespace Media_Player
             }
         }
 
-        private void ListView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void ListView_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.textBox.Text = "Drag";
-            DataObject data = new DataObject(DataFormats.Text, ((ListViewItem)e.Source).Content);
-            DragDrop.DoDragDrop((DependencyObject)e.Source, data, DragDropEffects.Copy);       
+            // this.textBox.Text = "Drag";
+            ListView l = (ListView)sender;
+            DataObject data = new DataObject(DataFormats.Text, ((ListView)e.Source));
+            DragDrop.DoDragDrop(l, data, DragDropEffects.Copy);  
+
+            a = playLista.SelectedIndex;
+            string str = a.ToString();
+            this.textBox.Text = str;
+
+        }
+
+        private void ListViewDragEnter(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.All;
+            playLista.Items.Add(e.Data.GetData(DataFormats.Text));
+        }
+
+        private void ListView_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+             if (e.ChangedButton == MouseButton.Right)
+            {
+                b = 4;
+                int index = playLista.Items.IndexOf(e.Source);
+                string str = index.ToString();
+                this.textBox.Text = str;
+
+                List<Uri> temp = new List<Uri>();
+
+
+                temp.Add((trackList.ElementAt(a)));
+                trackList[a] = trackList[b];
+                trackList[b] = temp[0];
+
+                AddToList();
+            }        
+        }
+
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            globaTrackNumber = playLista.SelectedIndex;
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+               this.DragMove();
         }
 
         private void rememberLastListSongsOpened()
@@ -443,6 +504,53 @@ namespace Media_Player
                 Application.Current.MainWindow.Height = 393;
 
                 playListFlag = false;
+            }
+        }
+
+        private void RepeatList_Cick(object sender, RoutedEventArgs e)
+        {
+            if (repeatList == false)
+            {
+                repeatList = true;
+                repeatSong = false;
+                repeatListButton.Background = Brushes.DarkGray;
+                repeatSongButton.Background = Brushes.Transparent;
+            }
+            else
+            {
+                repeatList = false;
+                repeatListButton.Background = Brushes.Transparent;
+            }          
+        }
+
+        private void RepeatSong_Click(object sender, RoutedEventArgs e)
+        {
+            if (repeatSong == false)
+            {
+                repeatSong = true;
+                repeatList = false;
+                repeatSongButton.Background = Brushes.DarkGray;
+                repeatListButton.Background = Brushes.Transparent;
+            }
+            else
+            {
+                repeatSong = false;
+                repeatSongButton.Background = Brushes.Transparent;
+            }           
+        }
+
+        void saveTempList()
+        {
+            using (Stream fileStream = new FileStream("temp.xml", FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                List<string> stringTracks2 = new List<string>();
+
+                for (int i = 0; i < trackList.Count(); i++)
+                {
+                    stringTracks2.Add(trackList[i].ToString());
+                }
+                XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
+                serializer.Serialize(fileStream, stringTracks2);
             }
         }
     }

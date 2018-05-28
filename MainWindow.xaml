@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Media_Player"
         mc:Ignorable="d"
+        MouseDown="Window_MouseDown"
         Title="MainWindow" Height="135" Width="400" ResizeMode="NoResize" Icon="./Resources/play.png"
-        WindowStyle="None" MouseDown="Window_MouseDown">
-
+        WindowStyle="None">
+      
 
     <Window.Resources>
 
@@ -175,7 +176,7 @@
     </Window.Resources>
 
     <Border BorderThickness="1,1,1,1" BorderBrush="LightGray" x:Name="playerBorder">
-        <StackPanel Background="#383e47">
+        <StackPanel Background="#383e47" MouseWheel="Grid_MouseWheel">
             <StackPanel>
                 <ProgressBar x:Name="volumeProgressBar" HorizontalAlignment="Left" Height="4" VerticalAlignment="Top" Width="399" RenderTransformOrigin="0.5,0.5"  Background="Transparent" BorderThickness="0" BorderBrush="Transparent" Margin="0,0,-1,0"/>
             </StackPanel>
@@ -244,7 +245,7 @@
                         <Image Source="./Resources/load.png" Height="15" Width="15"/>
                     </StackPanel>
                 </Button>
-                <Button  Width="40" Height="20" Margin="222,34,136,6" Click="Deletet_Click" Background="Transparent" ToolTip="Delete Song">
+                <Button  Width="40" Height="20" Margin="222,34,136,6" Click="Deleted_Click" Background="Transparent" ToolTip="Delete Song">
                     <StackPanel>
                         <Image Source="./Resources/remove.png" Height="14" Width="15" RenderTransformOrigin="0.556,-0.244"/>
                     </StackPanel>
@@ -254,6 +255,14 @@
                 </Button>
                 <Button  Width="40" Height="20" Margin="9,34,349,6" Click="Backward_Click" Background="Transparent" ToolTip="Previous Song">
                     <Image Source="./Resources/up.png" Height="14" Width="15" RenderTransformOrigin="0.556,-0.244"/>
+                </Button>
+                <Button  x:Name="repeatListButton" Content="L" Foreground="white" Padding="0 0 0 2" FontSize="7" Width="15"  Height="15" Margin="380,13,3,32"
+                         Background="Transparent" Click="RepeatList_Cick" ToolTip="Plays Next Song">
+                    
+                </Button>
+                <Button x:Name="repeatSongButton" Content="R" Foreground="white" Padding="0 0 0 0" FontSize="7" Width="15" Height="15" Margin="380,33,3,12"
+                        Background="Transparent" Click="RepeatSong_Click" ToolTip="Repeats Song">
+
                 </Button>
 
 
@@ -266,7 +275,8 @@
                 <ListView x:Name="playLista"  HorizontalAlignment="Left"  Margin="1,3,0,0"  VerticalAlignment="Top" Width="396" MaxHeight="0"
                   RenderTransformOrigin="0.485,0.765"  MouseDoubleClick="ListView_MouseDoubleClick" Background="#222225" 
                   BorderBrush="#FF343A44" Foreground="White" 
-                   AllowDrop="True" MouseLeftButtonDown="ListView_MouseLeftButtonDown" >
+                  AllowDrop="True" MouseLeftButtonDown="ListView_MouseRightButtonDown" MouseDown="ListView_MouseDown" MouseRightButtonDown="ListView_MouseRightButtonDown"
+                  SelectionChanged="ListView_SelectionChanged" >
 
                     <ListView.View >
                         <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle1}"  >
