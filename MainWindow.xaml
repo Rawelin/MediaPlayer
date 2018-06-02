@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         MouseDown="Window_MouseDown"
         Title="MainWindow" Height="135" Width="400" ResizeMode="NoResize" Icon="./Resources/play.png"
-        WindowStyle="None">
-      
+        WindowStyle="none">
+
 
     <Window.Resources>
 
@@ -258,7 +258,7 @@
                 </Button>
                 <Button  x:Name="repeatListButton" Content="L" Foreground="white" Padding="0 0 0 2" FontSize="7" Width="15"  Height="15" Margin="380,13,3,32"
                          Background="Transparent" Click="RepeatList_Cick" ToolTip="Plays Next Song">
-                    
+
                 </Button>
                 <Button x:Name="repeatSongButton" Content="R" Foreground="white" Padding="0 0 0 0" FontSize="7" Width="15" Height="15" Margin="380,33,3,12"
                         Background="Transparent" Click="RepeatSong_Click" ToolTip="Repeats Song">
@@ -276,7 +276,7 @@
                   RenderTransformOrigin="0.485,0.765"  MouseDoubleClick="ListView_MouseDoubleClick" Background="#222225" 
                   BorderBrush="#FF343A44" Foreground="White" 
                   AllowDrop="True" MouseLeftButtonDown="ListView_MouseRightButtonDown" MouseDown="ListView_MouseDown" MouseRightButtonDown="ListView_MouseRightButtonDown"
-                  SelectionChanged="ListView_SelectionChanged" >
+                  SelectionChanged="ListView_SelectionChanged">
 
                     <ListView.View >
                         <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle1}"  >
@@ -291,8 +291,16 @@
                     <ColumnDefinition Width="18*"/>
                     <ColumnDefinition Width="181*"/>
                 </Grid.ColumnDefinitions>
-                <Button Content="PLAYLIST" FontSize="8" Foreground="#ffffff" Click="ShowPlayList" Height="16" Width="100" Background="transparent" HorizontalAlignment="Center" BorderBrush="Transparent" Margin="113.333,2,149,3" Grid.Column="1">
-
+                <Button x:Name="upButton" Margin="74,2,252,2" Grid.Column="1" Height="16" Background="transparent" ToolTip="Moves Track Up" Click="MovesTrackUp">
+                    <Image Source="./Resources/top.png" Height="14" Width="15" RenderTransformOrigin="0.556,-0.244"/>
+                </Button>
+                <Button Content="PLAYLIST" FontSize="8" Foreground="#ffffff" Click="ShowPlayList" Height="16" Width="100"
+                        Background="transparent" HorizontalAlignment="Center" BorderBrush="Transparent" Margin="113.333,2,149,3" Grid.Column="1"
+                        ToolTip="Expands Playlist">
+                    
+                </Button>
+                <Button x:Name="downButton" Margin="215,2,111,2" Grid.Column="1" Height="16" Background="transparent" ToolTip="Moves Track Down" Click="MovesTrackDown">
+                    <Image Source="./Resources/bottom.png" Height="14" Width="15" RenderTransformOrigin="0.556,-0.244"/>
                 </Button>
             </Grid>
         </StackPanel>

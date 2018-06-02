@@ -35,7 +35,7 @@ namespace Media_Player
         private bool repeatSong = false;
 
         private int globaTrackNumber;
-        private int a, b;
+        private int firstIndex, secondIndex;
 
         public MainWindow()
         {
@@ -122,8 +122,6 @@ namespace Media_Player
                 ListViewItem item = playLista.ItemContainerGenerator.ContainerFromItem(playLista.SelectedItem) as ListViewItem;
                 item.Focus();
             }
-           
-
         }
 
         private void Play_Click(object sender, RoutedEventArgs e)
@@ -199,10 +197,7 @@ namespace Media_Player
 
                 this.textBox.Text = trimmedPath;
 
-                playLista.SelectedItem = playLista.Items.GetItemAt(globaTrackNumber);
-                playLista.ScrollIntoView(playLista.SelectedItem);
-                ListViewItem item = playLista.ItemContainerGenerator.ContainerFromItem(playLista.SelectedItem) as ListViewItem;
-                item.Focus();
+                higlightSelecedItem(globaTrackNumber);
             }
         }
 
@@ -223,11 +218,40 @@ namespace Media_Player
 
                 this.textBox.Text = trimmedPath;
 
-                playLista.SelectedItem = playLista.Items.GetItemAt(globaTrackNumber);
-                playLista.ScrollIntoView(playLista.SelectedItem);
-                ListViewItem item = playLista.ItemContainerGenerator.ContainerFromItem(playLista.SelectedItem) as ListViewItem;
-                item.Focus();
+                higlightSelecedItem(globaTrackNumber);
             }   
+        }
+
+        private void MovesTrackDown(object sender, RoutedEventArgs e)
+        {
+            if (playListFlag == false)
+            {
+                if (firstIndex < playLista.Items.Count - 1)
+                {
+                    secondIndex = firstIndex + 1;
+                    swap(firstIndex, secondIndex);
+                    firstIndex++;
+                }
+            }
+            firstIndex = secondIndex;
+
+            higlightSelecedItem(firstIndex);
+        }
+
+        private void MovesTrackUp(object sender, RoutedEventArgs e)
+        {
+            if (playListFlag == false)
+            {
+                if(firstIndex > 0)
+                {
+                    secondIndex = firstIndex - 1;
+                    swap(firstIndex, secondIndex);
+                    firstIndex--;
+                } 
+            }
+            firstIndex = secondIndex;
+
+            higlightSelecedItem(firstIndex);
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -430,45 +454,35 @@ namespace Media_Player
         private void ListView_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             // this.textBox.Text = "Drag";
-            ListView l = (ListView)sender;
+            ListView l = sender as ListView;
             DataObject data = new DataObject(DataFormats.Text, ((ListView)e.Source));
-            DragDrop.DoDragDrop(l, data, DragDropEffects.Copy);  
+            DragDrop.DoDragDrop(l, data, DragDropEffects.Copy);
 
-            a = playLista.SelectedIndex;
-            string str = a.ToString();
-            this.textBox.Text = str;
+            firstIndex = playLista.SelectedIndex;
+            string str = firstIndex.ToString();
+           // this.textBox.Text = str;
 
-        }
-
-        private void ListViewDragEnter(object sender, DragEventArgs e)
-        {
-            e.Effects = DragDropEffects.All;
-            playLista.Items.Add(e.Data.GetData(DataFormats.Text));
         }
 
         private void ListView_MouseDown(object sender, MouseButtonEventArgs e)
         {
-             if (e.ChangedButton == MouseButton.Right)
-            {
-                b = 4;
-                int index = playLista.Items.IndexOf(e.Source);
-                string str = index.ToString();
-                this.textBox.Text = str;
+          
+            secondIndex = trackList.Count - 1;
+            // secondIndex = playLista.SelectedIndex;
 
-                List<Uri> temp = new List<Uri>();
+            int index = playLista.Items.IndexOf(3);
+            string str = index.ToString();
+               
+            //MessageBox.Show("ff", str);
 
-
-                temp.Add((trackList.ElementAt(a)));
-                trackList[a] = trackList[b];
-                trackList[b] = temp[0];
-
-                AddToList();
-            }        
+           swap(firstIndex, secondIndex);
         }
+
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             globaTrackNumber = playLista.SelectedIndex;
+            firstIndex = playLista.SelectedIndex;
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -539,7 +553,7 @@ namespace Media_Player
             }           
         }
 
-        void saveTempList()
+        private void saveTempList()
         {
             using (Stream fileStream = new FileStream("temp.xml", FileMode.Create, FileAccess.Write, FileShare.None))
             {
@@ -552,6 +566,25 @@ namespace Media_Player
                 XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
                 serializer.Serialize(fileStream, stringTracks2);
             }
+        }
+
+        private void swap(int a, int b)
+        {
+            List<Uri> temp = new List<Uri>();
+
+            temp.Add((trackList.ElementAt(a)));
+            trackList[a] = trackList[b];
+            trackList[b] = temp[0];
+
+            AddToList();
+        }
+
+        private void higlightSelecedItem(int index)
+        {
+            playLista.SelectedItem = playLista.Items.GetItemAt(index);
+            playLista.ScrollIntoView(playLista.SelectedItem);
+            ListViewItem item = playLista.ItemContainerGenerator.ContainerFromItem(playLista.SelectedItem) as ListViewItem;
+            item.Focus();
         }
     }
 }
