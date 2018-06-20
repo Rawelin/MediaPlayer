@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Media_Player"
         mc:Ignorable="d"
         MouseDown="Window_MouseDown"
-        Title="MainWindow" Height="135" Width="400" ResizeMode="NoResize" Icon="./Resources/play.png"
+        Title="MainWindow" Height="135" Width="400" ResizeMode="NoResize" Icon="./Resources/mpi.ico"
         WindowStyle="none">
 
 

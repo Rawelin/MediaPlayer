@@ -224,34 +224,42 @@ namespace Media_Player
 
         private void MovesTrackDown(object sender, RoutedEventArgs e)
         {
-            if (playListFlag == false)
+            if(trackList.Count > 0)
             {
-                if (firstIndex < playLista.Items.Count - 1)
+                if (playListFlag == false)
                 {
-                    secondIndex = firstIndex + 1;
-                    swap(firstIndex, secondIndex);
-                    firstIndex++;
+                    if (firstIndex < playLista.Items.Count - 1)
+                    {
+                        secondIndex = firstIndex + 1;
+                        swap(firstIndex, secondIndex);
+                        firstIndex++;
+                    }
                 }
-            }
-            firstIndex = secondIndex;
+                firstIndex = secondIndex;
 
-            higlightSelecedItem(firstIndex);
+                higlightSelecedItem(firstIndex);
+            }
+           
         }
 
         private void MovesTrackUp(object sender, RoutedEventArgs e)
         {
-            if (playListFlag == false)
+            if (trackList.Count > 0)
             {
-                if(firstIndex > 0)
+                if (playListFlag == false)
                 {
-                    secondIndex = firstIndex - 1;
-                    swap(firstIndex, secondIndex);
-                    firstIndex--;
-                } 
-            }
-            firstIndex = secondIndex;
+                    if (firstIndex > 0)
+                    {
+                        secondIndex = firstIndex - 1;
+                        swap(firstIndex, secondIndex);
+                        firstIndex--;
+                    }
+                }
+                firstIndex = secondIndex;
 
-            higlightSelecedItem(firstIndex);
+                higlightSelecedItem(firstIndex);
+            }
+          
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
