@@ -11,11 +11,11 @@ namespace Media_Player
         
         public static string TrimPath(string path)
         {
-            char[] mychars = { '/' };
+            //char[] mychars = { '/' };
 
-            path = path.Replace(@"%", "");
-            path = path.Replace(@"2", "");
-            path = path.Replace(@"0", " ");
+            //path = path.Replace(@"%", "");
+            //path = path.Replace(@"2", "");
+            path = path.Replace(@"%20", " ");
 
             int foundS1 = path.LastIndexOf("/");
 

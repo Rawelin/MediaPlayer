@@ -2,17 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using Microsoft.Win32;
@@ -43,8 +36,9 @@ namespace Media_Player
           
             trackList = new List<Uri>();
 
-            rememberLastListSongsOpened();
-            autoListViewOpen();
+            CreateTempList();
+            RememberLastListSongsOpened();
+            AutoListViewOpen();
         }
         private void AddToList()
         {
@@ -499,13 +493,15 @@ namespace Media_Player
                this.DragMove();
         }
 
-        private void rememberLastListSongsOpened()
+        private void RememberLastListSongsOpened()
         {
             List<string> stringTracks = new List<string>();
 
             XmlSerializer serializer = new XmlSerializer(typeof(List<String>));
 
-            using (FileStream fileStream = File.OpenRead("temp.xml"))
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            using (FileStream fileStream = File.OpenRead(path + "/temp.xml"))
             {
                 stringTracks = (List<string>)serializer.Deserialize(fileStream);
             }
@@ -517,7 +513,7 @@ namespace Media_Player
             AddToList();
         }
 
-        private void autoListViewOpen()
+        private void AutoListViewOpen()
         {
             if(trackList.Count > 0)
             {
@@ -563,7 +559,9 @@ namespace Media_Player
 
         private void saveTempList()
         {
-            using (Stream fileStream = new FileStream("temp.xml", FileMode.Create, FileAccess.Write, FileShare.None))
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            using (Stream fileStream = new FileStream(path + "/temp.xml", FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 List<string> stringTracks2 = new List<string>();
 
@@ -573,6 +571,26 @@ namespace Media_Player
                 }
                 XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
                 serializer.Serialize(fileStream, stringTracks2);
+            }
+        }
+
+        // tworzy plik na ostatnio zapisywaną listę jeśli nie istnieje
+
+        private void CreateTempList() 
+        {
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            if (!File.Exists(path + "/temp.xml"))
+            using (Stream fileStream = new FileStream(path + "/temp.xml", FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                    List<string> stringTracks2 = new List<string>();
+
+                    for (int i = 0; i < trackList.Count(); i++)
+                    {
+                        stringTracks2.Add(trackList[i].ToString());
+                    }
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<string>));
+                    serializer.Serialize(fileStream, stringTracks2);
             }
         }
 
